@@ -1,0 +1,38 @@
+name: macOS acceptance
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: swift build
+
+      - name: Run normal and network-denied acceptance
+        run: ./scripts/acceptance.sh
+
+      - name: Package app
+        run: ./scripts/build-app.sh
+
+      - name: Verify extracted artifact
+        run: |
+          mkdir "$RUNNER_TEMP/rapp-recall-artifact"
+          tar -xzf build/RappRecall-macos-arm64.tar.gz \
+            -C "$RUNNER_TEMP/rapp-recall-artifact"
+          codesign --verify --deep --strict \
+            "$RUNNER_TEMP/rapp-recall-artifact/RappRecall.app"
+          RAPP_RECALL_LOCAL_KEY_PATH="$RUNNER_TEMP/rapp-recall-test.key" \
+            "$RUNNER_TEMP/rapp-recall-artifact/RappRecall.app/Contents/MacOS/RappRecall" \
+            doctor --root "$RUNNER_TEMP/rapp-recall-store"
+          "$RUNNER_TEMP/rapp-recall-artifact/RappRecall.app/Contents/MacOS/RappRecall" \
+            acceptance
