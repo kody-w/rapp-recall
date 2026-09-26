@@ -1,5 +1,9 @@
 # Rapp Recall
 
+<!-- rapp1:network-header:start -->
+[![RAPP/1](https://kody-w.github.io/rapp-hive-public/portfolio/badges/rapp-recall.svg)](https://github.com/kody-w/rapp-hive-public/blob/main/portfolio/repos/rapp-recall.md) · **New to RAPP?** [Start here: get your Brainstem →](https://github.com/kody-w/rapp-installer#start-here)
+<!-- rapp1:network-header:end -->
+
 A clean-room, local-first screen memory for macOS.
 
 Rapp Recall continuously captures the display at a low frame rate, recognizes
